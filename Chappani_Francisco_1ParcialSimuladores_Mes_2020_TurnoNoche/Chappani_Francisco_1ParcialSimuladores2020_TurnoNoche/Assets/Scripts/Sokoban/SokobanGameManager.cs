@@ -45,6 +45,16 @@ public class SokobanGameManager : MonoBehaviour
             orientacionJugador = "arriba";
             mover();
         }
+        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            orientacionJugador = "abajo";
+            mover();
+        }
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            orientacionJugador = "izquierda";
+            mover();
+        }
         if (Input.GetKeyDown(KeyCode.Z))
         {
             estoyDeshaciendo = true;
@@ -72,17 +82,48 @@ public class SokobanGameManager : MonoBehaviour
 
             if (objProximo != null && objProximo.CompareTag("casillero"))
             {
-                nivel.Tablero.setearObjeto(casillero, posicionJugador);
-                nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, 1);
+                if(orientacionJugador == "izquierda" || orientacionJugador == "abajo")
+                {
+                    nivel.Tablero.setearObjeto(casillero, posicionJugador);
+                    nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, -1);
+                } 
+                else if(orientacionJugador == "arriba" || orientacionJugador == "derecha")
+                {
+                    nivel.Tablero.setearObjeto(casillero, posicionJugador);
+                    nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, 1);
+                }
+
             }
             else
             {
                 if (objProximo != null && objProximo.CompareTag("bloque") && objProximoProximo != null)
                 {
-                    nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, 1);
+
+                    if (orientacionJugador == "izquierda" || orientacionJugador == "abajo")
                     {
                         nivel.Tablero.setearObjeto(casillero, posicionJugador);
-                        nivel.Tablero.setearObjeto(bloque, posicionJugador, orientacionJugador, 2); ;
+                        nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, -1);
+                    }
+                    else if (orientacionJugador == "arriba" || orientacionJugador == "derecha")
+                    {
+                        nivel.Tablero.setearObjeto(casillero, posicionJugador);
+                        nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, 1);
+                        nivel.Tablero.setearObjeto(bloque, posicionJugador, orientacionJugador, 2);
+                    }                                              
+                }
+                else if(objProximo != null && objProximo.CompareTag("bloque") || objProximoProximo != null && objProximoProximo.CompareTag("bloque"))
+                {
+                    if (orientacionJugador == "izquierda" || orientacionJugador == "abajo")
+                    {
+                        nivel.Tablero.setearObjeto(casillero, posicionJugador);
+                        nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, 0);
+                    }
+                    else if (orientacionJugador == "arriba" || orientacionJugador == "derecha")
+                    {
+                        nivel.Tablero.setearObjeto(casillero, posicionJugador);
+                        nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, 0);
+                        nivel.Tablero.setearObjeto(bloque, posicionJugador, orientacionJugador, 1);
+                        nivel.Tablero.setearObjeto(bloque, posicionJugador, orientacionJugador, 2);
                     }
                 }
             }
