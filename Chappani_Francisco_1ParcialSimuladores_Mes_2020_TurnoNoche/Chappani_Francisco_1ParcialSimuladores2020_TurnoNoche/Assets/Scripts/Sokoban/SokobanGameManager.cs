@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
 
@@ -7,7 +8,8 @@ public class SokobanGameManager : MonoBehaviour
     Nivel nivel, nivelAux;
     GameObject casillero, casilleroTarget, pared, jugador, bloque;
     List<Vector2> posOcupadasEsperadasCasillerosTarget;
-    Stack pilaTablerosAnteriores;
+    //List<Tablero> anterioresTableros = new List<Tablero>();
+    Stack<Tablero> pilaTablerosAnteriores = new Stack<Tablero>(); 
 
     string orientacionJugador;
     string nombreNivelActual = "Nivel1";
@@ -22,6 +24,7 @@ public class SokobanGameManager : MonoBehaviour
         jugador = SokobanLevelManager.instancia.dameLstPrefabsSokoban().Find(x => x.name == "Jugador");
         bloque = SokobanLevelManager.instancia.dameLstPrefabsSokoban().Find(x => x.name == "Bloque");
         CargarNivel(nombreNivelActual);
+        gameOver = false;
     }
 
     private void CargarNivel(string nombre)
@@ -35,31 +38,35 @@ public class SokobanGameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        if(!gameOver)
         {
-            orientacionJugador = "derecha";
-            mover();
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                orientacionJugador = "derecha";
+                mover();
+            }
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                orientacionJugador = "arriba";
+                mover();
+            }
+            if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                orientacionJugador = "abajo";
+                mover();
+            }
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                orientacionJugador = "izquierda";
+                mover();
+            }
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                estoyDeshaciendo = true;
+                mover();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            orientacionJugador = "arriba";
-            mover();
-        }
-        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            orientacionJugador = "abajo";
-            mover();
-        }
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            orientacionJugador = "izquierda";
-            mover();
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            estoyDeshaciendo = true;
-            mover();
-        }
+
     }
 
     private void mover()
@@ -73,12 +80,18 @@ public class SokobanGameManager : MonoBehaviour
             tablAux.setearObjetos(pared, nivel.Tablero.damePosicionesObjetos("Pared"));
             tablAux.setearObjetos(jugador, nivel.Tablero.damePosicionesObjetos("Jugador"));
 
-            //TIP: pilaTablerosAnteriores.Push(tablAux);
+            pilaTablerosAnteriores.Push(tablAux);
 
             Vector2 posicionJugador = new Vector2(nivel.Tablero.damePosicionObjeto("Jugador").x, nivel.Tablero.damePosicionObjeto("Jugador").y);
             GameObject objProximo, objProximoProximo;
             objProximo = nivel.Tablero.dameObjeto(posicionJugador, orientacionJugador, 1);
             objProximoProximo = nivel.Tablero.dameObjeto(posicionJugador, orientacionJugador, 2);
+
+            if(orientacionJugador == "izquierda" || orientacionJugador == "abajo")
+            {
+                objProximo = nivel.Tablero.dameObjeto(posicionJugador, orientacionJugador, -1);
+                objProximoProximo = nivel.Tablero.dameObjeto(posicionJugador, orientacionJugador, -2);
+            }
 
             if (objProximo != null && objProximo.CompareTag("casillero"))
             {
@@ -96,9 +109,12 @@ public class SokobanGameManager : MonoBehaviour
             }
             else
             {
-                if (objProximo != null && objProximo.CompareTag("bloque") && objProximoProximo != null)
+                if (objProximo.CompareTag("bloque") && objProximoProximo.CompareTag("bloque"))
                 {
 
+                }                                              
+                else if(objProximo != null && objProximo.CompareTag("bloque") || objProximoProximo != null)
+                {
                     if (orientacionJugador == "izquierda" || orientacionJugador == "abajo")
                     {
                         nivel.Tablero.setearObjeto(casillero, posicionJugador);
@@ -109,21 +125,6 @@ public class SokobanGameManager : MonoBehaviour
                         nivel.Tablero.setearObjeto(casillero, posicionJugador);
                         nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, 1);
                         nivel.Tablero.setearObjeto(bloque, posicionJugador, orientacionJugador, 2);
-                    }                                              
-                }
-                else if(objProximo != null && objProximo.CompareTag("bloque") || objProximoProximo != null && objProximoProximo.CompareTag("bloque"))
-                {
-                    if (orientacionJugador == "izquierda" || orientacionJugador == "abajo")
-                    {
-                        nivel.Tablero.setearObjeto(casillero, posicionJugador);
-                        nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, 0);
-                    }
-                    else if (orientacionJugador == "arriba" || orientacionJugador == "derecha")
-                    {
-                        nivel.Tablero.setearObjeto(casillero, posicionJugador);
-                        nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, 0);
-                        nivel.Tablero.setearObjeto(bloque, posicionJugador, orientacionJugador, 1);
-                        nivel.Tablero.setearObjeto(bloque, posicionJugador, orientacionJugador, 2);
                     }
                 }
             }
@@ -132,10 +133,17 @@ public class SokobanGameManager : MonoBehaviour
             if (ChequearVictoria(nivel.Tablero))
             {
                 Debug.Log("Gané");
+                gameOver = true;
             }
         }
         else
         {
+            if (pilaTablerosAnteriores.Count > 0)
+            {
+                Tablero ultimoTablero = pilaTablerosAnteriores.Last<Tablero>();
+
+                InstanciadorPrefabs.instancia.graficarObjetosTablero(pilaTablerosAnteriores.Pop(), SokobanLevelManager.instancia.dameLstPrefabsSokoban());
+            }
             estoyDeshaciendo = false;
         }
     }
@@ -147,7 +155,16 @@ public class SokobanGameManager : MonoBehaviour
 
     private bool ChequearVictoria(Tablero tablero)
     {
-        return false;
+        List<Vector2> CasillerosTarget = nivel.Tablero.damePosicionesObjetos("CasilleroTarget");
+
+        if (CasillerosTarget.Count == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

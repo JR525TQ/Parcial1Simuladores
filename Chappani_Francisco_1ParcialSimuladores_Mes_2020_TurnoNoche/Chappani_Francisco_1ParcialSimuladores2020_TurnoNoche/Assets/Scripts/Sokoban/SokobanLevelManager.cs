@@ -69,9 +69,9 @@ public class SokobanLevelManager : MonoBehaviour
 
         tablero.setearObjeto(pared, new Vector2(6, 6));
         tablero.setearObjeto(jugador, new Vector2(1,1));
-        tablero.setearObjeto(bloque, new Vector2(5,4));
-        tablero.setearObjeto(bloque, new Vector2(3, 3));
-        tablero.setearObjeto(bloque, new Vector2(4, 4));
+        tablero.setearObjeto(bloque, new Vector2(1,4));
+        tablero.setearObjeto(bloque, new Vector2(2, 4));
+        tablero.setearObjeto(bloque, new Vector2(3, 4));
         tablero.setearObjeto(casilleroTarget, new Vector2(1, 7));
         tablero.setearObjeto(casilleroTarget, new Vector2(2, 7));
         tablero.setearObjeto(casilleroTarget, new Vector2(3, 7));
