@@ -349,6 +349,7 @@ MonoBehaviour:
   jugador: {fileID: 7376750908415990722, guid: cd1665171739fc04b8b43159d7fd570b, type: 3}
   bloque: {fileID: 2492000819906198164, guid: 181ba36944b037948b1381d0deecff7b, type: 3}
   pared: {fileID: 4495135840980655537, guid: e82cde2dc8ecadb429a90656155b848f, type: 3}
+  tex: {fileID: 2800000, guid: 77f5822b5c909874c96cd0da6cef3ab4, type: 3}
 --- !u!1 &1696488687
 GameObject:
   m_ObjectHideFlags: 0

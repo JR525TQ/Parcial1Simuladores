@@ -113,7 +113,7 @@ public class SokobanGameManager : MonoBehaviour
                 {
 
                 }                                              
-                else if(objProximo != null && objProximo.CompareTag("bloque") || objProximoProximo != null)
+                else if(objProximo != null && objProximo.CompareTag("bloque") && objProximoProximo != null)
                 {
                     if (orientacionJugador == "izquierda" || orientacionJugador == "abajo")
                     {

@@ -11,6 +11,14 @@ public class SokobanLevelManager : MonoBehaviour
  
     public static SokobanLevelManager instancia;
 
+    public Texture2D tex;
+
+    const string Player = "303F9F";
+    const string Block = "388E3D";
+    const string Wall = "D50000";
+    const string Tile = "c";
+    const string TagTile = "212121";
+
     void Awake()
     {
         if (instancia == null)
@@ -66,7 +74,36 @@ public class SokobanLevelManager : MonoBehaviour
     private Tablero dameTableroNivel1()
     {
         Tablero tablero = SokobanLevelManager.instancia.dameTablero(8, 8);
+        for (int x = 0; x < tex.width; x++)
+        {
+            for (int y = 0; y < tex.height; y++)
+            {
+                tex.GetPixel(x, y);
+                Color color = tex.GetPixel(x, y);
 
+                string hex = ColorUtility.ToHtmlStringRGB(color);
+
+                switch (hex)
+                {
+                    case Player:
+                        tablero.setearObjeto(jugador, new Vector2(x, y));
+                        break;
+                    case Block:
+                        tablero.setearObjeto(bloque, new Vector2(x, y));
+                        break;
+                    case Tile:
+                        tablero.setearObjeto(casillero, new Vector2(x, y));
+                        break;
+                    case Wall:
+                        tablero.setearObjeto(pared, new Vector2(x, y));
+                        break;
+                    case TagTile:
+                        tablero.setearObjeto(casilleroTarget, new Vector2(x, y));
+                        break;
+                }
+            }
+        }
+        /*
         tablero.setearObjeto(pared, new Vector2(6, 6));
         tablero.setearObjeto(jugador, new Vector2(1,1));
         tablero.setearObjeto(bloque, new Vector2(1,4));
@@ -75,6 +112,7 @@ public class SokobanLevelManager : MonoBehaviour
         tablero.setearObjeto(casilleroTarget, new Vector2(1, 7));
         tablero.setearObjeto(casilleroTarget, new Vector2(2, 7));
         tablero.setearObjeto(casilleroTarget, new Vector2(3, 7));
+        */
         return tablero;
     }
 }
