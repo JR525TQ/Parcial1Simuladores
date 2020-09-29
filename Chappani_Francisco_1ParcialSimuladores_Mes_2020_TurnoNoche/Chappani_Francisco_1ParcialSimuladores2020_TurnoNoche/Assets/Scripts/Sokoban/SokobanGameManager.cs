@@ -9,12 +9,15 @@ public class SokobanGameManager : MonoBehaviour
     GameObject casillero, casilleroTarget, pared, jugador, bloque;
     List<Vector2> posOcupadasEsperadasCasillerosTarget;
     //List<Tablero> anterioresTableros = new List<Tablero>();
-    Stack<Tablero> pilaTablerosAnteriores = new Stack<Tablero>(); 
+    Stack<Tablero> pilaTablerosAnteriores = new Stack<Tablero>();
+    List<Vector2> casillerosTarget = new List<Vector2>();
 
     string orientacionJugador;
     string nombreNivelActual = "Nivel1";
     bool gameOver = false;
     bool estoyDeshaciendo = false;
+
+ 
 
     private void Start()
     {
@@ -24,6 +27,7 @@ public class SokobanGameManager : MonoBehaviour
         jugador = SokobanLevelManager.instancia.dameLstPrefabsSokoban().Find(x => x.name == "Jugador");
         bloque = SokobanLevelManager.instancia.dameLstPrefabsSokoban().Find(x => x.name == "Bloque");
         CargarNivel(nombreNivelActual);
+        casillerosTarget = nivel.Tablero.damePosicionesObjetos("CasilleroTarget");
         gameOver = false;
     }
 
@@ -157,9 +161,23 @@ public class SokobanGameManager : MonoBehaviour
 
     private bool ChequearVictoria(Tablero tablero)
     {
-        List<Vector2> CasillerosTarget = nivel.Tablero.damePosicionesObjetos("CasilleroTarget");
+        List<Vector2> bloques = tablero.damePosicionesObjetos("Bloque");
 
-        if (CasillerosTarget.Count == 0)
+        int onTarget = 0;
+
+        foreach(Vector2 cas in casillerosTarget)
+        {
+            foreach(Vector2 blk in bloques)
+            {
+                if(SonIgualesLosVectores(cas, blk))
+                {
+                    onTarget++;
+                    Debug.Log(onTarget);
+                }
+            }
+        }
+
+        if (onTarget == casillerosTarget.Count)
         {
             return true;
         }
