@@ -119,6 +119,7 @@ public class SokobanGameManager : MonoBehaviour
                     {
                         nivel.Tablero.setearObjeto(casillero, posicionJugador);
                         nivel.Tablero.setearObjeto(jugador, posicionJugador, orientacionJugador, -1);
+                        nivel.Tablero.setearObjeto(bloque, posicionJugador, orientacionJugador, -2);
                     }
                     else if (orientacionJugador == "arriba" || orientacionJugador == "derecha")
                     {
@@ -140,7 +141,8 @@ public class SokobanGameManager : MonoBehaviour
         {
             if (pilaTablerosAnteriores.Count > 0)
             {
-                Tablero ultimoTablero = pilaTablerosAnteriores.Last<Tablero>();
+                Tablero ultimoTablero = pilaTablerosAnteriores.First<Tablero>();
+                nivel.Tablero = ultimoTablero;
 
                 InstanciadorPrefabs.instancia.graficarObjetosTablero(pilaTablerosAnteriores.Pop(), SokobanLevelManager.instancia.dameLstPrefabsSokoban());
             }
