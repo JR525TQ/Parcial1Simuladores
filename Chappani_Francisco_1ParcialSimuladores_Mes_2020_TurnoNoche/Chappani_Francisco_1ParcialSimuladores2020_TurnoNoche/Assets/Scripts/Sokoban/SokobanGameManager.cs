@@ -9,6 +9,7 @@ public class SokobanGameManager : MonoBehaviour
     GameObject casillero, casilleroTarget, pared, jugador, bloque;
     List<Vector2> posOcupadasEsperadasCasillerosTarget;
     //List<Tablero> anterioresTableros = new List<Tablero>();
+    Queue<Tablero> queuetableros = new Queue<Tablero>();
     Stack<Tablero> pilaTablerosAnteriores = new Stack<Tablero>();
     List<Vector2> casillerosTarget = new List<Vector2>();
 
@@ -84,7 +85,7 @@ public class SokobanGameManager : MonoBehaviour
             tablAux.setearObjetos(pared, nivel.Tablero.damePosicionesObjetos("Pared"));
             tablAux.setearObjetos(jugador, nivel.Tablero.damePosicionesObjetos("Jugador"));
 
-            pilaTablerosAnteriores.Push(tablAux);
+            //pilaTablerosAnteriores.Push(tablAux);
 
             Vector2 posicionJugador = new Vector2(nivel.Tablero.damePosicionObjeto("Jugador").x, nivel.Tablero.damePosicionObjeto("Jugador").y);
             GameObject objProximo, objProximoProximo;
@@ -133,7 +134,12 @@ public class SokobanGameManager : MonoBehaviour
                     }
                 }
             }
-            InstanciadorPrefabs.instancia.graficarObjetosTablero(nivel.Tablero, SokobanLevelManager.instancia.dameLstPrefabsSokoban());
+
+            //InstanciadorPrefabs.instancia.graficarObjetosTablero(nivel.Tablero, SokobanLevelManager.instancia.dameLstPrefabsSokoban());
+            queuetableros.Enqueue(nivel.Tablero);
+            //pilaTablerosAnteriores.Push(nivel.Tablero);
+
+            Debug.Log(queuetableros.Count);
 
             if (ChequearVictoria(nivel.Tablero))
             {
@@ -184,6 +190,14 @@ public class SokobanGameManager : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    public void GraficarProximoTablero()
+    {
+        if (queuetableros.Count > 0)
+        {
+            InstanciadorPrefabs.instancia.graficarObjetosTablero(queuetableros.Dequeue(), SokobanLevelManager.instancia.dameLstPrefabsSokoban());
         }
     }
 }
