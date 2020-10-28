@@ -12,13 +12,18 @@ public class SokobanGameManager : MonoBehaviour
     Queue<Tablero> queuetableros = new Queue<Tablero>();
     Stack<Tablero> pilaTablerosAnteriores = new Stack<Tablero>();
     List<Vector2> casillerosTarget = new List<Vector2>();
+    Light luz;
+
 
     string orientacionJugador;
     string nombreNivelActual = "Nivel1";
     bool gameOver = false;
     bool estoyDeshaciendo = false;
 
- 
+    private void Awake()
+    {
+        
+    }
 
     private void Start()
     {
@@ -30,6 +35,7 @@ public class SokobanGameManager : MonoBehaviour
         CargarNivel(nombreNivelActual);
         casillerosTarget = nivel.Tablero.damePosicionesObjetos("CasilleroTarget");
         gameOver = false;
+        luz = jugador.gameObject.GetComponent<Light>();
     }
 
     private void CargarNivel(string nombre)
@@ -198,7 +204,14 @@ public class SokobanGameManager : MonoBehaviour
         if (queuetableros.Count > 0)
         {
             InstanciadorPrefabs.instancia.graficarObjetosTablero(queuetableros.Dequeue(), SokobanLevelManager.instancia.dameLstPrefabsSokoban());
+            
         }
+    }
+    public void PrenderLuz()
+    {
+        luz.enabled=true;
+        queuetableros.Enqueue(nivel.Tablero);
+        luz.enabled=false;
     }
 }
 
