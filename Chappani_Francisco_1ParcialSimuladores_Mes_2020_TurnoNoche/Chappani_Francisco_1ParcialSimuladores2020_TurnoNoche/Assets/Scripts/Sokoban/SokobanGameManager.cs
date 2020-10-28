@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
+using System;
 
 public class SokobanGameManager : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class SokobanGameManager : MonoBehaviour
     GameObject casillero, casilleroTarget, pared, jugador, bloque;
     List<Vector2> posOcupadasEsperadasCasillerosTarget;
     //List<Tablero> anterioresTableros = new List<Tablero>();
-    Queue<Tablero> queuetableros = new Queue<Tablero>();
+    Queue<Tablero> queueTableros = new Queue<Tablero>();
     Stack<Tablero> pilaTablerosAnteriores = new Stack<Tablero>();
     List<Vector2> casillerosTarget = new List<Vector2>();
 
@@ -17,8 +18,6 @@ public class SokobanGameManager : MonoBehaviour
     string nombreNivelActual = "Nivel1";
     bool gameOver = false;
     bool estoyDeshaciendo = false;
-
- 
 
     private void Start()
     {
@@ -136,10 +135,10 @@ public class SokobanGameManager : MonoBehaviour
             }
 
             //InstanciadorPrefabs.instancia.graficarObjetosTablero(nivel.Tablero, SokobanLevelManager.instancia.dameLstPrefabsSokoban());
-            queuetableros.Enqueue(nivel.Tablero);
+            queueTableros.Enqueue(nivel.Tablero);
             //pilaTablerosAnteriores.Push(nivel.Tablero);
 
-            Debug.Log(queuetableros.Count);
+            Debug.Log(queueTableros.Count);
 
             if (ChequearVictoria(nivel.Tablero))
             {
@@ -195,10 +194,18 @@ public class SokobanGameManager : MonoBehaviour
 
     public void GraficarProximoTablero()
     {
-        if (queuetableros.Count > 0)
+        Tablero primerTablero = queueTableros.Dequeue();
+
+        if (queueTableros.Count > 0)
         {
-            InstanciadorPrefabs.instancia.graficarObjetosTablero(queuetableros.Dequeue(), SokobanLevelManager.instancia.dameLstPrefabsSokoban());
+            StartCoroutine(Movimiento(primerTablero));
         }
+    }
+
+    public IEnumerator Movimiento(Tablero dequeue)
+    {
+        InstanciadorPrefabs.instancia.graficarObjetosTablero(dequeue ,SokobanLevelManager.instancia.dameLstPrefabsSokoban());
+        yield return new WaitForSeconds(1);
     }
 }
 
