@@ -84,7 +84,7 @@ public class SokobanGameManager : MonoBehaviour
             tablAux.setearObjetos(pared, nivel.Tablero.damePosicionesObjetos("Pared"));
             tablAux.setearObjetos(jugador, nivel.Tablero.damePosicionesObjetos("Jugador"));
 
-            pilaTablerosAnteriores.Push(tablAux);
+            //pilaTablerosAnteriores.Push(tablAux);
 
             Vector2 posicionJugador = new Vector2(nivel.Tablero.damePosicionObjeto("Jugador").x, nivel.Tablero.damePosicionObjeto("Jugador").y);
             GameObject objProximo, objProximoProximo;
@@ -133,7 +133,11 @@ public class SokobanGameManager : MonoBehaviour
                     }
                 }
             }
-            InstanciadorPrefabs.instancia.graficarObjetosTablero(nivel.Tablero, SokobanLevelManager.instancia.dameLstPrefabsSokoban());
+
+            //InstanciadorPrefabs.instancia.graficarObjetosTablero(nivel.Tablero, SokobanLevelManager.instancia.dameLstPrefabsSokoban());
+            pilaTablerosAnteriores.Push(nivel.Tablero);
+
+            Debug.Log(pilaTablerosAnteriores.Count);
 
             if (ChequearVictoria(nivel.Tablero))
             {
@@ -184,6 +188,14 @@ public class SokobanGameManager : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    public void GraficarProximoTablero()
+    {
+        if (pilaTablerosAnteriores.Count > 0)
+        {
+            InstanciadorPrefabs.instancia.graficarObjetosTablero(pilaTablerosAnteriores.Pop(), SokobanLevelManager.instancia.dameLstPrefabsSokoban());
         }
     }
 }
