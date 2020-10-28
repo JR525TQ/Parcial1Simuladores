@@ -9,6 +9,7 @@ public class SokobanGameManager : MonoBehaviour
     GameObject casillero, casilleroTarget, pared, jugador, bloque;
     List<Vector2> posOcupadasEsperadasCasillerosTarget;
     //List<Tablero> anterioresTableros = new List<Tablero>();
+    Queue<Tablero> queuetableros = new Queue<Tablero>();
     Stack<Tablero> pilaTablerosAnteriores = new Stack<Tablero>();
     List<Vector2> casillerosTarget = new List<Vector2>();
 
@@ -135,9 +136,10 @@ public class SokobanGameManager : MonoBehaviour
             }
 
             //InstanciadorPrefabs.instancia.graficarObjetosTablero(nivel.Tablero, SokobanLevelManager.instancia.dameLstPrefabsSokoban());
-            pilaTablerosAnteriores.Push(nivel.Tablero);
+            queuetableros.Enqueue(nivel.Tablero);
+            //pilaTablerosAnteriores.Push(nivel.Tablero);
 
-            Debug.Log(pilaTablerosAnteriores.Count);
+            Debug.Log(queuetableros.Count);
 
             if (ChequearVictoria(nivel.Tablero))
             {
@@ -193,9 +195,9 @@ public class SokobanGameManager : MonoBehaviour
 
     public void GraficarProximoTablero()
     {
-        if (pilaTablerosAnteriores.Count > 0)
+        if (queuetableros.Count > 0)
         {
-            InstanciadorPrefabs.instancia.graficarObjetosTablero(pilaTablerosAnteriores.Pop(), SokobanLevelManager.instancia.dameLstPrefabsSokoban());
+            InstanciadorPrefabs.instancia.graficarObjetosTablero(queuetableros.Dequeue(), SokobanLevelManager.instancia.dameLstPrefabsSokoban());
         }
     }
 }

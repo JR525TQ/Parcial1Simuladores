@@ -4,7 +4,7 @@ using UnityEngine;
 public class InstanciadorPrefabs : MonoBehaviour
 {
     public static InstanciadorPrefabs instancia;
-
+    
     void Awake()
     {
         if (instancia == null)
